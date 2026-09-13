@@ -167,10 +167,7 @@ export async function POST(request: Request) {
   if (action === "approve") {
     try {
       if (targetEmail) {
-        const outcome = await payReferral(targetEmail, recordId);
-        if (outcome !== "skipped") {
-          console.log(`[referral] payout for ${targetEmail} on approve: ${outcome}`);
-        }
+        await payReferral(targetEmail, recordId);
       }
     } catch (err) {
       console.error("[referral] payout on approve failed", err);

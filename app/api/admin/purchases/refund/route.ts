@@ -64,7 +64,6 @@ export async function POST(request: Request) {
   }
 
   await deleteRedemptionRecord(recordId);
-  console.log(`[admin-purchases] ${gate.email} refunded redemption ${recordId}`);
 
   return NextResponse.json({ ok: true });
 }

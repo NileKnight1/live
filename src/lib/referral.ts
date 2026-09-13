@@ -100,9 +100,7 @@ export async function payReferral(
   const handle = String(referral.fields[REFERRAL_FIELDS.referrerHandle] ?? "");
   const referrerEmail = await resolveReferrerEmail(handle);
   if (!referrerEmail) {
-    console.warn(
-      `[referral] payout deferred: handle "${handle}" for referee ${refereeEmail} does not resolve to an email`,
-    );
+    console.warn(`[referral] payout deferred: handle "${handle}" does not resolve to an email`);
     return "unresolved";
   }
 

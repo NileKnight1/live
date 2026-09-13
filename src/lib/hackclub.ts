@@ -76,15 +76,6 @@ export async function getIdentity(accessToken: string): Promise<HackclubIdentity
   const data = await response.json();
   const identity = data.identity ?? null;
 
-  // TEMP DIAGNOSTIC (openspec add-oauth-identity-autofill, task 1.1/1.2):
-  // dump the ENTIRE raw /api/v1/me response, pretty-printed and untruncated,
-  // so we can see exactly which key holds the date of birth. Remove once tuned.
-  console.log(
-    "\n===== [hackclub][DIAG] RAW /api/v1/me response BEGIN =====\n" +
-      JSON.stringify(data, null, 2) +
-      "\n===== [hackclub][DIAG] RAW /api/v1/me response END =====\n",
-  );
-
   if (!identity) return null;
 
   // Defensive: if HCA returns address / birthdate / verification fields as
@@ -197,20 +188,5 @@ export function isIdentityCompleteForSubmission(identity: HackclubIdentity | nul
   const verified = isIdentityVerified(identity);
   const address = mapIdentityAddress(identity);
   const birthday = normalizeBirthdate(identity?.birthdate);
-  const complete = verified && address !== null && birthday !== null;
-
-  // TEMP DIAGNOSTIC (task 1.2): when the check fails, log exactly which of the
-  // three sub-checks failed and the raw values behind them. Remove once tuned.
-  if (!complete) {
-    console.log("[hackclub][DIAG] identity NOT complete for submission:", {
-      verified,
-      hasAddress: address !== null,
-      hasBirthday: birthday !== null,
-      verification_status: identity?.verification_status ?? null,
-      ysws_eligible: identity?.ysws_eligible ?? null,
-      rawAddress: identity?.address ?? identity?.addresses ?? null,
-      rawBirthdate: identity?.birthdate ?? null,
-    });
-  }
-  return complete;
+  return verified && address !== null && birthday !== null;
 }
